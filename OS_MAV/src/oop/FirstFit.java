@@ -24,9 +24,6 @@ public class FirstFit implements AllocationStrat {
         int index = findBlock(memory, requestSize);
         
         if (index == -1) {
-        	
-            System.out.println("No block found for size " + requestSize);
-
         } else {
             System.out.println("Found a fit at index " + index +": " + memory.get(index));
         }
