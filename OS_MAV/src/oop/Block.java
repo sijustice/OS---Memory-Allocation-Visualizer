@@ -13,17 +13,37 @@ public class Block {
         this.processId = processId;
     }
 
-    public int getStart() { return start; }
-    public void setStart(int start) { this.start = start; }
+    public int getStart() { 
+    	return start; 
+    	}
+    
+    public void setStart(int start) { 
+    	this.start = start; 
+    	}
 
-    public int getSize() { return size; }
-    public void setSize(int size) { this.size = size; }
+    public int getSize() { 
+    	return size;  
+    	}
+    
+    public void setSize(int size) { 
+    	this.size = size; 
+    	}
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() { 
+    	return status; 
+    	}
+    
+    public void setStatus(String status) { 
+    	this.status = status; 
+    	}
 
-    public String getProcessId() { return processId; }
-    public void setProcessId(String processId) { this.processId = processId; }
+    public String getProcessId() { 
+    	return processId; 
+    	}
+    
+    public void setProcessId(String processId) { 
+    	this.processId = processId; 
+    	}
 
     public boolean isFree() {
         return "free".equalsIgnoreCase(status);
