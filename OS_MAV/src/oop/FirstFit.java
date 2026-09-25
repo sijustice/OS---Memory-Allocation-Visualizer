@@ -1,5 +1,6 @@
 package oop;
 
+
 import java.util.*;
 
 public class FirstFit implements AllocationStrat {
@@ -16,5 +17,19 @@ public class FirstFit implements AllocationStrat {
 		System.out.println("No block is found for size " +size);
 		return -1;
 	}
+	
+	public void allocate(Scanner sc, List<Block> memory) {
+        int requestSize = Main.getPositiveInt(sc, "\nEnter size of process to allocate: ");
+        
+        int index = findBlock(memory, requestSize);
+        
+        if (index == -1) {
+        	
+            System.out.println("No block found for size " + requestSize);
+
+        } else {
+            System.out.println("Found a fit at index " + index +": " + memory.get(index));
+        }
+    }
 
 }

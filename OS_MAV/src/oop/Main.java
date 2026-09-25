@@ -6,6 +6,7 @@ import java.util.*;
 public class Main {
 	public static void main(String args[]) {
 		Scanner sc = new Scanner(System.in);
+		List<Block> memory = new ArrayList<>();
 		char ch = '\0';
 		
 		while(ch != 'X' && ch != 'x') {
@@ -19,51 +20,12 @@ public class Main {
 			switch(ch) {
 			case 'A': case 'a':
 				
-				//input number of memory blocks
-				System.out.print("Enter number of memory blocks: ");
-				int numBlocks = 0;
-				if (sc.hasNextInt()) {
-					numBlocks = sc.nextInt();
-					if(numBlocks > 0) {
-					} else {
-						System.out.println("Please enter a number greater than 0!");
-					}
-				} else {
-					System.out.println("Please enter a valid number!");
-				}
+				memory = createMemory(sc, memory); break;
 				
-				//input memory size
-				List<Block> memory = new ArrayList<>();
-				int start = 0;
-				for (int i = 0; i < numBlocks; i++) {
-					System.out.print("Memory Size " + (i + 1) + ": " );
-					int size = sc.nextInt();
-					memory.add(new Block(start, size, "free", null));
-					start += size;
-				}
-				
-				break;
 			case 'B': case 'b':
-				System.out.println("Select your choice \n"
-						+ "(A) First Fit\n"
-						+ "(B) Best Fit\n"
-						+ "(X) Back\n"
-						);
 				
-				switch(ch) {
-				case 'A' : case 'a':
-					
-					break;
-				case 'B' : case 'b':
-					// Enter the code for Best Fit here bro
-					break;
-				case 'X' : case 'x':
-					break;
-				default:
-					System.out.println("\nINVALID CHOICE!\n");
-					break;
-				}
-				break;
+				allocateMemory(sc, memory); break;
+				
 			case 'C': case 'c':
 				break;
 			case 'X': case 'x':
@@ -75,5 +37,59 @@ public class Main {
 			}
 			
 		}			
+	}
+	
+	//Make sures na lagi greater than 1 yung input
+	public static int getPositiveInt(Scanner sc, String message) {
+		while (true) {
+	        System.out.print(message);
+
+	        if (sc.hasNextInt()) {
+	            int value = sc.nextInt();
+
+	            if (value > 0) {
+	                return value;
+	            }
+
+	            System.out.println("Please enter a number greater than 0!");
+
+	        } else {
+	            System.out.println("Please enter a valid integer!");
+	            sc.next();
+	        }
+	    }
+	}
+	//Dito gagawa ng memory blocks
+	public static List<Block> createMemory(Scanner sc, List<Block> memory){
+		
+		int numBlocks = getPositiveInt(sc, "\nEnter number of memory blocks: \n");
+
+		int start = 0;
+		
+		for (int i = 0; i < numBlocks; i++) {
+			System.out.print("Memory Size " + (i + 1) + ": " );
+			int size = sc.nextInt();
+			
+			memory.add(new Block(start, size, "free", null));
+			start += size;
+		}
+		return memory;
+	}
+	
+	public static void allocateMemory(Scanner sc, List<Block> memory) {
+		System.out.println("\nChoose Allocation Algorithm:");
+	    System.out.println("1. First Fit");
+	    System.out.println("2. Best Fit");
+	    
+		int ch = getPositiveInt(sc, "\nEnter choice: ");
+
+		if(ch == 1) {
+			FirstFit firstFit = new FirstFit();
+		    firstFit.allocate(sc, memory);
+		} else if (ch == 2) {
+			//MARL DITO MO LAGAY CODE MO HAHHAHAHA
+		} else {
+			System.out.println("Invalid choice!");
+		}
 	}
 }
