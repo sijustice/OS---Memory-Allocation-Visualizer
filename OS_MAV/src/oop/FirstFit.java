@@ -19,14 +19,33 @@ public class FirstFit implements AllocationStrat {
 	}
 	
 	public void allocate(Scanner sc, List<Block> memory) {
-        int requestSize = Main.getPositiveInt(sc, "\nEnter size of process to allocate: ");
+        int numProcess = Main.getPositiveInt(sc, "\nEnter the number of processe(s): ");
         
-        int index = findBlock(memory, requestSize);
-        
-        if (index == -1) {
-        } else {
-            System.out.println("Found a fit at index " + index +": " + memory.get(index));
-        }
-    }
-
+        for(int p = 1 ; p <= numProcess; p++ ) {
+        	int requestSize = Main.getPositiveInt(sc, "\nEnter the size of process" + p + ": ");
+        	
+        	int index = findBlock(memory, requestSize);
+        	
+        	if (index == -1) {
+				System.out.println("No block found for process P" + p + " (size " + requestSize + ")");
+			} else {
+				Block block = memory.get(index);
+ 
+				if (block.getSize() == requestSize) {
+			
+					block.setStatus("allocated");
+					block.setProcessId("P" + p);
+				} else {
+					Block allocated = new Block(block.getStart(), requestSize, "allocated", "P" + p);
+					Block remaining = new Block(block.getStart() + requestSize, block.getSize() - requestSize, "free", null);
+					memory.set(index, allocated);
+					
+					memory.add(index + 1, remaining);
+				}
+ 
+				System.out.println("Process P" + p + " allocated at index " + index + ": " + memory.get(index));
+			}
+		}
+	}
+ 
 }

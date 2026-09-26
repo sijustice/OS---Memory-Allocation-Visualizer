@@ -77,7 +77,7 @@ public class Main {
 	}
 	
 	public static void allocateMemory(Scanner sc, List<Block> memory) {
-		System.out.println("\nChoose Allocation Algorithm:");
+		System.out.println("\nChoose Allocation Algorithm: ");
 	    System.out.println("1. First Fit");
 	    System.out.println("2. Best Fit");
 	    
