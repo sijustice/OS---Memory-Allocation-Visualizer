@@ -1,5 +1,7 @@
 package oop;
 import javax.swing.*;
+import java.util.*;
+import java.util.List;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -14,7 +16,8 @@ public class OSfinalsGUI extends JFrame {
     private DefaultTableModel blockModel;
     private JPanel memoryVisualPanel;
     private JTextArea logArea;
-
+    private List<Block> memory = new ArrayList<>();
+    
     public OSfinalsGUI() {
         setTitle("Memory Allocation System");
         setSize(1100, 750);
@@ -157,10 +160,29 @@ public class OSfinalsGUI extends JFrame {
 
     private void onAddBlockClicked() {
         String rawSize = txtBlockSize.getText().trim();
-
-        // Dito for addBlock
-
-        log("Action triggered: Add Block (Size: " + rawSize + ")");
+        System.out.println("DEBUG --- the raw size is["+ rawSize +"]");
+        try{
+        	int size = Integer.parseInt(rawSize);
+        	
+        	if(size <= 0){
+        		log("Block size must be greater than 0.");
+        		return;
+        	}
+	        int start = 0;
+	        if(!memory.isEmpty()){
+	        	Block last = memory.get(memory.size() - 1);
+	        	start = last.getStart() + last.getSize();
+	        }
+	        	
+	    	memory.add(new Block(start, size, "free", null));
+	    	refreshDisplay();
+	        log("Added block of size " + size + " KB.");
+						                    
+        } catch (NumberFormatException e) {
+        	System.out.println("DEBUG - caught exception, message: " + e.getMessage());
+            log("Please enter a valid number for block size.");
+            }
+         txtBlockSize.setText("");
     }
     
 
@@ -168,6 +190,37 @@ public class OSfinalsGUI extends JFrame {
         String jobName = txtProcessName.getText().trim();
         String rawSize = txtProcessSize.getText().trim();
         String selectedStrategy = (String) comboStrategy.getSelectedItem(); // for first-fit or best-fit
+        
+        if (jobName.isEmpty()) {
+            log("Please enter a job name.");
+            return;
+        }
+        
+        Boolean success = null;
+        
+        try {
+        	
+        	int size = Integer.parseInt(rawSize);
+        	
+        	if("First Fit".equals(selectedStrategy)) {
+        		FirstFit firstFit = new FirstFit();
+        		success = firstFit.allocate(memory, jobName, size);
+        	} else {
+        		// here mo lagay code marl - JK
+        		// pwede mo naman gayahin format ng sakin ( if same us ng methods)
+        	}
+        	
+        	if (success) {
+                refreshDisplay();
+                log("Allocated " + jobName + " (" + size + " KB) using " + selectedStrategy);
+            } else {
+                log("No block found for " + jobName + " (" + size + " KB).");
+            }
+        	
+        } catch (NumberFormatException e) {
+        	System.out.println("DEBUG - caught exception, message: " + e.getMessage());
+            log("Please enter a valid number for block size.");
+            }
         
         //here nalang for on allocation
 
@@ -200,6 +253,22 @@ public class OSfinalsGUI extends JFrame {
     /**
      * Call this to clear and repopulate the table with updated block data.
      */
+    private void refreshDisplay() {
+        clearTable();
+        clearVisualPanel();
+ 
+        for (int i = 0; i < memory.size(); i++) {
+            Block b = memory.get(i);
+            boolean occupied = !b.isFree();
+            String jobLabel = occupied ? b.getProcessId() : "Free";
+            int usedSize = occupied ? b.getSize() : 0;
+ 
+            addTableRow(i + 1, b.getSize(), usedSize, b.getStatus());
+            addVisualBlock(i + 1, b.getSize(), jobLabel, occupied);
+        }
+    }
+    
+    
     public void addTableRow(int blockId, int totalSize, int usedSize, String status) {
         blockModel.addRow(new Object[] {
             "Block " + blockId,

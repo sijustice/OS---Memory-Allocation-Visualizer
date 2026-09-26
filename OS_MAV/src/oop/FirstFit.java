@@ -18,34 +18,22 @@ public class FirstFit implements AllocationStrat {
 		return -1;
 	}
 	
-	public void allocate(Scanner sc, List<Block> memory) {
-        int numProcess = Main.getPositiveInt(sc, "\nEnter the number of processe(s): ");
-        
-        for(int p = 1 ; p <= numProcess; p++ ) {
-        	int requestSize = Main.getPositiveInt(sc, "\nEnter the size of process" + p + ": ");
-        	
-        	int index = findBlock(memory, requestSize);
-        	
-        	if (index == -1) {
-				System.out.println("No block found for process P" + p + " (size " + requestSize + ")");
-			} else {
-				Block block = memory.get(index);
- 
-				if (block.getSize() == requestSize) {
-			
-					block.setStatus("allocated");
-					block.setProcessId("P" + p);
-				} else {
-					Block allocated = new Block(block.getStart(), requestSize, "allocated", "P" + p);
-					Block remaining = new Block(block.getStart() + requestSize, block.getSize() - requestSize, "free", null);
-					memory.set(index, allocated);
-					
-					memory.add(index + 1, remaining);
-				}
- 
-				System.out.println("Process P" + p + " allocated at index " + index + ": " + memory.get(index));
-			}
-		}
+	public boolean allocate(List<Block> memory, String processId, int size) {
+	    int index = findBlock(memory, size);
+	    if (index == -1) {
+	        return false;
+	    }
+	    Block block = memory.get(index);
+	    if (block.getSize() == size) {
+	        block.setStatus("allocated");
+	        block.setProcessId(processId);
+	    } else {
+	        Block allocated = new Block(block.getStart(), size, "allocated", processId);
+	        Block remaining = new Block(block.getStart() + size, block.getSize() - size, "free", null);
+	        memory.set(index, allocated);
+	        memory.add(index + 1, remaining);
+	    }
+	    return true;
 	}
  
 }
