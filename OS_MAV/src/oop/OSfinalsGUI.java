@@ -174,7 +174,7 @@ public class OSfinalsGUI extends JFrame {
 	        	start = last.getStart() + last.getSize();
 	        }
 	        	
-	    	memory.add(new Block(start, size, "free", null));
+	        memory.add(new Block(start, size, "free", null));
 	    	refreshDisplay();
 	        log("Added block of size " + size + " KB.");
 						                    

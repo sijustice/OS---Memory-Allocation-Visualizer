@@ -31,7 +31,6 @@ public class FirstFit implements AllocationStrat {
 	        Block allocated = new Block(block.getStart(), size, "allocated", processId);
 	        Block remaining = new Block(block.getStart() + size, block.getSize() - size, "free", null);
 	        memory.set(index, allocated);
-	        memory.add(index + 1, remaining);
 	    }
 	    return true;
 	}
