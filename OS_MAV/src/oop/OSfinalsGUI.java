@@ -221,9 +221,11 @@ public class OSfinalsGUI extends JFrame {
                     //calculates the frag
                     int fragmentation = firstFit.fragmentation(block, size);
                     totalFrag += fragmentation;
+                    
                     //allocate na
                     success = firstFit.allocate(memory, jobName, size);
-
+                    
+                    
                     if (success) {
 
                         refreshDisplay();
@@ -232,6 +234,7 @@ public class OSfinalsGUI extends JFrame {
                         if(fragmentation > 0) {
                         	log("Fragmentation: " + fragmentation + " KB");
                         	log("Total Fragmentation:" + totalFrag + " KB");
+                        	
                         }
                         else {
                         	log("Fragmentation: none");
@@ -285,7 +288,15 @@ public class OSfinalsGUI extends JFrame {
     }
 
     private void onCompactClicked() {
-        // for compaction
+    	FirstFit firstFit = new FirstFit();
+    	try {
+    		
+    		int excess = firstFit.compaction(memory);
+            log("Added new partition with total Excess: " + excess);
+    		refreshDisplay();
+    	}catch(Exception e) {
+    		
+    	}
 
         log("Action triggered: Compact Memory");
     }
@@ -384,7 +395,7 @@ public class OSfinalsGUI extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new OSfinalsGUI().setVisible(true));
-        
+       
         
     }
 }

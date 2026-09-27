@@ -26,8 +26,51 @@ public class FirstFit implements AllocationStrat {
 	
 	public int compaction(List<Block> memory) {
 		
-		return 0;
+		int totalExcess = 0;
+		int currentStart= 0;
+		
+		for(Block block : memory) {
+			if(!block.isFree()) {
+				int excess = block.getSize() - block.getUsedSize();
+				
+				if(excess > 0) {
+					totalExcess += excess;
+				}
+				
+				
+			}
+			else{
+				totalExcess += block.getSize();
+						
+			}
+			
+			block.setSize(block.getUsedSize());
+			
+			block.setStart(currentStart);
+
+	        currentStart += block.getSize();
+			
+		}
+		
+		memory.removeIf(Block::isFree);
+		
+		 if (totalExcess > 0) {
+
+		        Block newFreeBlock = new Block(
+		            currentStart,
+		            totalExcess,
+		            "free",
+		            null
+		        );
+
+		        memory.add(newFreeBlock);
+		 }
+		
+		System.out.println(totalExcess);
+		return totalExcess;
+		
 	}
+	
 	public boolean allocate(List<Block> memory, String processId, int size) {
 		int index = findBlock(memory, size);
 	    if (index == -1) {
