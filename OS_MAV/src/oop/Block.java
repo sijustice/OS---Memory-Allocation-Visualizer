@@ -3,12 +3,14 @@ package oop;
 public class Block {
     private int start;
     private int size;
+    private int usedSize;
     private String status;     // "free" or "allocated"
     private String processId;  // null if free
 
     public Block(int start, int size, String status, String processId) {
         this.start = start;
         this.size = size;
+        this.usedSize = 0;
         this.status = status;
         this.processId = processId;
     }
@@ -28,7 +30,14 @@ public class Block {
     public void setSize(int size) { 
     	this.size = size; 
     	}
-
+    public int getUsedSize() {
+    	return usedSize;
+    	}
+ 
+    public void setUsedSize(int usedSize) {
+    	this.usedSize = usedSize;
+    	}
+    
     public String getStatus() { 
     	return status; 
     	}

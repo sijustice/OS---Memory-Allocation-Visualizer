@@ -29,20 +29,14 @@ public class FirstFit implements AllocationStrat {
 		return 0;
 	}
 	public boolean allocate(List<Block> memory, String processId, int size) {
-	    int index = findBlock(memory, size);
+		int index = findBlock(memory, size);
 	    if (index == -1) {
 	        return false;
 	    }
-	    Block block = memory.get(index);
-	    if (block.getSize() == size) {
-	        block.setStatus("allocated");
-	        block.setProcessId(processId);
-	    } else {
-	        Block allocated = new Block(block.getStart(), size, "allocated", processId);
-	        Block remaining = new Block(block.getStart() + size, block.getSize() - size, "free", null);
-	        memory.set(index, allocated);
-	        memory.add(remaining);
-	    }
+	    Block block = memory.get(index); //makes gets the index
+	    block.setStatus("allocated"); //status if allocated or not
+	    block.setProcessId(processId); //gives the job a label
+	    block.setUsedSize(size); //ade tinitingnan kung ilan yung used na kb
 	    return true;
 	}
  
