@@ -197,7 +197,7 @@ public class OSfinalsGUI extends JFrame {
             log("Please enter a job name.");
             return;
         }
-<<<<<<< HEAD
+//<<<<<<< HEAD
         
         Boolean success = null;
         
@@ -225,10 +225,8 @@ public class OSfinalsGUI extends JFrame {
             log("Please enter a valid number for block size.");
             }
         
-=======
->>>>>>> ad2e7f69f26d79dd4ba6a248ba5f052bb70f0e3b
-
-        Boolean success = null;
+//=======
+//>>>>>>> ad2e7f69f26d79dd4ba6a248ba5f052bb70f0e3b
 
         try {
 
