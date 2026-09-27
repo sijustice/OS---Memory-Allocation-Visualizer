@@ -20,7 +20,7 @@ public class FirstFit implements AllocationStrat {
 	
 	public int fragmentation(Block block, int size) {
 		
-		return block.getSize() - size;
+		return 0;
 	}
 	
 	
