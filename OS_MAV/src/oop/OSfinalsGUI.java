@@ -157,6 +157,7 @@ public class OSfinalsGUI extends JFrame {
     
     
     //pa parse nalang ng rawSize into integer
+    //ok n pre
 
     private void onAddBlockClicked() {
         String rawSize = txtBlockSize.getText().trim();
@@ -222,7 +223,6 @@ public class OSfinalsGUI extends JFrame {
             log("Please enter a valid number for block size.");
             }
         
-        //here nalang for on allocation
 
         log("Action triggered: Allocate " + jobName + " (" + rawSize + " KB) using " + selectedStrategy);
     }
