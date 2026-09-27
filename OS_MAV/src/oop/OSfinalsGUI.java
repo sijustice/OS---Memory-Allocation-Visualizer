@@ -188,14 +188,16 @@ public class OSfinalsGUI extends JFrame {
     
 
     private void onAllocateClicked() {
+
         String jobName = txtProcessName.getText().trim();
         String rawSize = txtProcessSize.getText().trim();
         String selectedStrategy = (String) comboStrategy.getSelectedItem(); // for first-fit or best-fit
-        
+
         if (jobName.isEmpty()) {
             log("Please enter a job name.");
             return;
         }
+<<<<<<< HEAD
         
         Boolean success = null;
         
@@ -223,8 +225,77 @@ public class OSfinalsGUI extends JFrame {
             log("Please enter a valid number for block size.");
             }
         
+=======
+>>>>>>> ad2e7f69f26d79dd4ba6a248ba5f052bb70f0e3b
 
-        log("Action triggered: Allocate " + jobName + " (" + rawSize + " KB) using " + selectedStrategy);
+        Boolean success = null;
+
+        try {
+
+            int size = Integer.parseInt(rawSize);
+
+            if ("First Fit".equals(selectedStrategy)) {
+
+                FirstFit firstFit = new FirstFit();
+
+                //hanapin yung block
+                int index = firstFit.findBlock(memory, size);
+
+                if (index != -1) {
+
+                    //gets the value ng block na ifrafrag
+                    Block block = memory.get(index);
+
+                    //calculates the frag
+                    int fragmentation = firstFit.fragmentation(block, size);
+
+                    //allocate na
+                    success = firstFit.allocate(memory, jobName, size);
+
+                    if (success) {
+
+                        refreshDisplay();
+
+                        log("Allocated " + jobName + " (" + size + " KB) using " + selectedStrategy);
+                        if(fragmentation > 0) {
+                        	log("Fragmentation: " + fragmentation + " KB");
+                        }
+                        else {
+                        	log("Fragmentation: none");
+                        }
+
+                        log("Action triggered: Allocate " + jobName
+                                + " (" + rawSize + " KB) using " + selectedStrategy);
+
+                    }
+
+                } else {
+
+                    success = false;
+
+                }
+
+            } else {
+
+                // here mo lagay code marl - JK
+                // Best Fit
+
+            }
+
+            if (success != null && !success) {
+
+                log("No block found for " + jobName + " (" + size + " KB).");
+
+            }
+
+        } catch (NumberFormatException e) {
+
+            System.out.println("DEBUG - caught exception, message: " + e.getMessage());
+
+            log("Please enter a valid number for block size.");
+
+        }
+
     }
 
     private void onDeallocateClicked() {
@@ -340,5 +411,7 @@ public class OSfinalsGUI extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new OSfinalsGUI().setVisible(true));
+        
+        
     }
 }
