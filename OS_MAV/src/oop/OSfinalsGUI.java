@@ -17,6 +17,7 @@ public class OSfinalsGUI extends JFrame {
     private JPanel memoryVisualPanel;
     private JTextArea logArea;
     private List<Block> memory = new ArrayList<>();
+    private int totalFrag = 0;
     
     public OSfinalsGUI() {
         setTitle("Memory Allocation System");
@@ -219,7 +220,7 @@ public class OSfinalsGUI extends JFrame {
 
                     //calculates the frag
                     int fragmentation = firstFit.fragmentation(block, size);
-
+                    totalFrag += fragmentation;
                     //allocate na
                     success = firstFit.allocate(memory, jobName, size);
 
@@ -230,6 +231,7 @@ public class OSfinalsGUI extends JFrame {
                         log("Allocated " + jobName + " (" + size + " KB) using " + selectedStrategy);
                         if(fragmentation > 0) {
                         	log("Fragmentation: " + fragmentation + " KB");
+                        	log("Total Fragmentation:" + totalFrag + " KB");
                         }
                         else {
                         	log("Fragmentation: none");
