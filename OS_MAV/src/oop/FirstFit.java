@@ -18,6 +18,16 @@ public class FirstFit implements AllocationStrat {
 		return -1;
 	}
 	
+	public int fragmentation(Block block, int size) {
+		
+		return block.getSize() - size;
+	}
+	
+	
+	public int compaction(List<Block> memory) {
+		
+		return 0;
+	}
 	public boolean allocate(List<Block> memory, String processId, int size) {
 	    int index = findBlock(memory, size);
 	    if (index == -1) {
