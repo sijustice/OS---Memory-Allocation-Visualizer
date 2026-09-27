@@ -197,37 +197,10 @@ public class OSfinalsGUI extends JFrame {
             log("Please enter a job name.");
             return;
         }
-//<<<<<<< HEAD
         
         Boolean success = null;
         
-        try {
-        	
-        	int size = Integer.parseInt(rawSize);
-        	
-        	if("First Fit".equals(selectedStrategy)) {
-        		FirstFit firstFit = new FirstFit();
-        		success = firstFit.allocate(memory, jobName, size);
-        	} else {
-        		// here mo lagay code marl - JK
-        		// pwede mo naman gayahin format ng sakin ( if same us ng methods)
-        	}
-        	
-        	if (success) {
-                refreshDisplay();
-                log("Allocated " + jobName + " (" + size + " KB) using " + selectedStrategy);
-            } else {
-                log("No block found for " + jobName + " (" + size + " KB).");
-            }
-        	
-        } catch (NumberFormatException e) {
-        	System.out.println("DEBUG - caught exception, message: " + e.getMessage());
-            log("Please enter a valid number for block size.");
-            }
         
-//=======
-//>>>>>>> ad2e7f69f26d79dd4ba6a248ba5f052bb70f0e3b
-
         try {
 
             int size = Integer.parseInt(rawSize);
