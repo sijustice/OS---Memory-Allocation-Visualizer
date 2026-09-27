@@ -16,6 +16,7 @@ public class OSfinalsGUI extends JFrame {
     private DefaultTableModel blockModel;
     private JPanel memoryVisualPanel;
     private JTextArea logArea;
+    private JLabel lblTotalFragmentation;
     private List<Block> memory = new ArrayList<>();
     private int totalFrag = 0;
     
@@ -104,7 +105,7 @@ public class OSfinalsGUI extends JFrame {
 
         // Table for Memory Blocks
         blockModel = new DefaultTableModel(
-            new String[] { "Block ID", "Total Size", "Used Size", "Status" },
+            new String[] { "Block ID", "Total Size", "Used Size", "Status", "Fragmentation" },
             0
         );
         blockTable = new JTable(blockModel);
@@ -115,6 +116,27 @@ public class OSfinalsGUI extends JFrame {
         // Right Sub-Panel: Dynamic Visualizer
         JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
         rightPanel.setOpaque(false);
+
+        // Header panel for Total Fragmentation summary
+        JPanel summaryPanel = new JPanel(new BorderLayout());
+        summaryPanel.setBackground(panelBg);
+        summaryPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(accentBlue),
+            new EmptyBorder(10, 15, 10, 15)
+        ));
+
+        JLabel summaryTitle = new JLabel("Total Internal Fragmentation: ");
+        summaryTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
+        summaryTitle.setForeground(Color.WHITE);
+
+        lblTotalFragmentation = new JLabel("0 KB");
+        lblTotalFragmentation.setFont(new Font("SansSerif", Font.BOLD, 16));
+        lblTotalFragmentation.setForeground(new Color(231, 76, 60)); // Red highlight color
+
+        summaryPanel.add(summaryTitle, BorderLayout.WEST);
+        summaryPanel.add(lblTotalFragmentation, BorderLayout.EAST);
+
+        rightPanel.add(summaryPanel, BorderLayout.NORTH); // Added summary card at top
 
         memoryVisualPanel = new JPanel();
         memoryVisualPanel.setLayout(new BoxLayout(memoryVisualPanel, BoxLayout.Y_AXIS));
@@ -321,16 +343,39 @@ public class OSfinalsGUI extends JFrame {
             addTableRow(i + 1, b.getSize(), usedSize, b.getStatus());
             addVisualBlock(i + 1, b.getSize(), jobLabel, occupied);
         }
+
+        updateTotalFragmentationLabel();
     }
     
     
     public void addTableRow(int blockId, int totalSize, int usedSize, String status) {
+        int fragmentation = status.equalsIgnoreCase("Allocated") || status.equalsIgnoreCase("Occupied")
+                ? (totalSize - usedSize)
+                : 0;
+
         blockModel.addRow(new Object[] {
             "Block " + blockId,
             totalSize + " KB",
             usedSize + " KB",
-            status
+            status,
+            fragmentation + " KB"
         });
+    }
+
+    /**
+     * Sums fragmentation (totalSize - usedSize) across every allocated block
+     * and updates the summary label on the right panel.
+     */
+    public void updateTotalFragmentationLabel() {
+        int totalFragNow = 0;
+
+        for (Block b : memory) {
+            if (!b.isFree()) {
+                totalFragNow += (b.getSize() - b.getUsedSize());
+            }
+        }
+
+        lblTotalFragmentation.setText(totalFragNow + " KB");
     }
 
     /**
