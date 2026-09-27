@@ -302,7 +302,7 @@ public class OSfinalsGUI extends JFrame {
             boolean occupied = !b.isFree();
             String jobLabel = occupied ? b.getProcessId() : "Free";
             int usedSize = occupied ? b.getSize() : 0;
- 
+            
             addTableRow(i + 1, b.getSize(), usedSize, b.getStatus());
             addVisualBlock(i + 1, b.getSize(), jobLabel, occupied);
         }
