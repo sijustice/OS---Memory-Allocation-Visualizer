@@ -67,7 +67,8 @@ public class FirstFit implements AllocationStrat {
 		 }
 		
 		System.out.println(totalExcess);
-		return totalExcess;
+		
+		return 0;
 		
 	}
 	

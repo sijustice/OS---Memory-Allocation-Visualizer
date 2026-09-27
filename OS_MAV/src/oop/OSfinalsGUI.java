@@ -292,7 +292,7 @@ public class OSfinalsGUI extends JFrame {
     	try {
     		
     		int excess = firstFit.compaction(memory);
-            log("Added new partition with total Excess: " + excess);
+            log("Added new partition with total fragmentation + free partition : " + excess );
     		refreshDisplay();
     	}catch(Exception e) {
     		
