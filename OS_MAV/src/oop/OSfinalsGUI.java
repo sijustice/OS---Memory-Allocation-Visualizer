@@ -20,6 +20,7 @@ public class OSfinalsGUI extends JFrame {
     private List<Block> memory = new ArrayList<>();
     private int totalFrag = 0;
     
+    
     public OSfinalsGUI() {
         setTitle("Memory Allocation System");
         setSize(1100, 750);
@@ -274,10 +275,33 @@ public class OSfinalsGUI extends JFrame {
                 }
 
             } else {
+                BestFit bestFit = new BestFit();
+                int index = bestFit.findBlock(memory, size);
 
-                // here mo lagay code marl - JK
-                // Best Fit
+                if (index != -1) {
+                    // get block data
+                    Block block = memory.get(index);
 
+                    int fragmentation = bestFit.fragmentation(block, size);
+                    totalFrag += fragmentation;
+
+                    // allocates the job
+                    success = bestFit.allocate(memory, jobName, size);
+
+                    if (success) {
+                        refreshDisplay();
+                        log("Allocated " + jobName + " (" + size + " KB) using " + selectedStrategy);
+                        if (fragmentation > 0) {
+                            log("Fragmentation: " + fragmentation + " KB");
+                            log("Total Fragmentation: " + totalFrag + " KB");
+                        } else {
+                            log("Fragmentation: none");
+                        }
+                        log("Action triggered: Allocate " + jobName + " (" + rawSize + " KB) using " + selectedStrategy);
+                    }
+                } else {
+                    success = false;
+                }
             }
 
             if (success != null && !success) {
@@ -304,8 +328,34 @@ public class OSfinalsGUI extends JFrame {
             return;
         }
 
-        // Here nalang for Deallocation
-
+      Boolean success = null;
+        try {
+        	// kuha block data
+        	Block block = memory.get(selectedRow);
+        
+        	// check kung free yung block
+        	if (block.isFree()) {
+        		success = false;
+        		log("Selected block is already free.");
+        		} else {
+        			// dealloc
+        			success = Deallocation.deallocate(memory, selectedRow);
+        if (success) {
+                    refreshDisplay();
+                    log("Deallocated Block " + (selectedRow + 1));
+                    log("Block is now free.");
+                }
+            }
+    
+           
+            if (success != null && !success) {
+                log("Unable to deallocate Block " + (selectedRow + 1) + ".");
+            }
+            // if nag error dealloc
+        } catch (Exception e) {
+            System.out.println("DEBUG - caught exception, message: " + e.getMessage());
+            log("An error occurred during deallocation.");
+        }
         log("Action triggered: Deallocate selected row " + selectedRow);
     }
 
